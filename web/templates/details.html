@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row content" style="padding-top:10px">
+    <div class="row">
+        <div class="col-4 col-md-12">
+            <p style="color:#efe2e2">Poniżej znajduje się streszczenie projektu ustawy</p>
+            <p style="color:#efe2e2;background:#c452e0;border:solid;border-width:1px;border-style:dotted">
+                {{summary}}</p>
+            <p style="color:#efe2e2">Całość projektu można znaleźć <a class="link-black" href="{{url}}">na stronie
+                sejmowej druku {{project_id}}</a> a poniżej można zobaczyć przebieg <a class="link-black"
+                                                                                       href="{{process_url}}">powiązanego
+                procesu legislacynego</a> (<- kliknij jeśli nie widzisz tego fragmentu poniżej)</p>
+            <iframe class="details-iframe" src="{{process_url}}" title="Przebieg procesu legislacyjnego"></iframe>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

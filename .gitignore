@@ -1,0 +1,6 @@
+sejm_parser/download/**
+sejm_parser/backup/**
+sejm_parser/backup_temp/**
+sejm_parser/generated_hashtags/**
+sejm_parser/img_ocr_temp/**
+sejm_parser/metadata/**

@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row content" style="padding-top:10px">
+
+    {% for dict_item in summaries %}
+
+    <div class="row " style="padding-top:2vh">
+        <div class="col-4 col-xs-12 ">
+
+            <p property="projekt ustawy"><span style="color:#efe2e2;font-weight: bold">{{loop.index}}.</span> <a
+                    id="{{dict_item['id']}}"
+                    onclick="javascript:onLinkClicked('{{dict_item['id']}}')"
+                    class="link-black"
+                    href="/item={{dict_item['id']}}">{{dict_item["title"]}}</a>
+            </p>
+            <p style="font-size:14px;margin-top:-8px;margin-left:1vw"><span class="label label-warning"
+                                                                            style="color:#292929">Data dodania: [{{dict_item["added_date"]}}]</span>
+                <span class="label label-primary" style="color:#292929">{{dict_item["hashtags"]}}</span>
+            </p>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+    <script>
+        markAlreadyReadLinks();
+
+
+
+
+    </script>
+
+</div>
+{% endblock %}

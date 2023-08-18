@@ -1,0 +1,33 @@
+html {
+  margin: auto;
+  line-height: 1.75;
+  font-size: 1.25em;
+
+}
+
+.content{
+  background: #4f5967;
+  }
+
+ .header{
+  background: #c452e0;
+  }
+
+  .link-black{
+  color:#efe2e2;
+  text-decoration: underline
+  }
+
+  .link-black:hover{
+    color: white;
+    }
+
+    .details-iframe{
+      width:80%;
+      height:70vh;
+      margin-left:10%;
+      margin-right:10%;
+
+    }
+
+

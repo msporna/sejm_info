@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row content" style="padding-top:10px">
+    <div class="row">
+        <div class="col-4 col-md-12 ">
+            <p style="color:#efe2e2;background:#c452e0;border:solid;border-width:1px;border-style:dotted">Sejm.info to
+                strona która zawiera streszczenia wszystkich projektów ustaw przygotowywanych przez posłów ze wszystkich
+                klubów parlamentarnych. Celem strony jest możliwość szybkiego sprawdzenia co dzieje się w sejmie
+                ponieważ to przekłada się na nasze codzienne życie. Z drugiej strony media pokazują tylko to co chcą i
+                nigdy nie są obiektywne. Dzięki tej prostej stronie sami możemy zobaczyć nad czym pracuje sejm i śledzić
+                proces legislacyjny projektów, które nas interesują a potem wyciągnąć własne wnioski bez zbędnej
+                narracji. Nas- obywateli i mieszkańców.</p>
+
+            <p><span class="label label-primary" style="color:#efe2e2">W przygotowaniu są kolejne funkcjonalności które przyczynią się do większej ilości prezentowanych informacji.</span><span
+                    class="label label-warning"
+                    style="color:#efe2e2">Ostatnia aktualizacja : {{last_update_date}}</span></p>
+            <a href="https://twitter.com/sejm_info" style="color:#efe2e2;text-decoration: underline;">Kontakt poprzez
+                Twitter</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
