@@ -30,7 +30,27 @@ html {
 
     }
 
+   .posel-details-iframe{
+      width:100%;
+      height:70vh;
+      margin-left:1%;
+      margin-right:1%;
+       margin-top:10px;
+    }
+
 
 .accordion-button:not(.collapsed){
 background-color:#c452e061 !important;
+}
+
+.card-posel{
+width: 18rem !important;
+display:inline-block !important;
+}
+
+@media (max-width: 800px) {
+  .card-posel{
+    width: 13rem !important;
+    display:inline-block !important;
+}
 }

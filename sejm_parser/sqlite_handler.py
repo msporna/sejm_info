@@ -69,3 +69,16 @@ class SqliteHandler:
                 connection.close()
                 print(f"insert of {project_number} done")
         print("done inserting")
+
+    def insert_poslowie(self, poslowie):
+        for p in poslowie:
+            if p.get('active'):
+                print(f"inserting {p.get('firstLastName')}")
+                sql = "INSERT INTO poslowie(first_name_last_name,club,dob,education,district_name,number_of_votes,place_of_birth,photo,posel_id) VALUES(?,?,?,?,?,?,?,?,?)"
+                connection = self.open_connection()
+                connection.cursor().execute(sql, (
+                    p.get('firstLastName'), p.get('club'), p.get('birthDate'), p.get('educationLevel'),
+                    p.get('districtName'), p.get('numberOfVotes'), p.get('birthLocation'), p.get('photo'), p.get('id')))
+                connection.commit()
+                connection.close()
+                print(f"inserted")

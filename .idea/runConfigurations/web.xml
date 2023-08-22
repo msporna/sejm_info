@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="web" type="PythonConfigurationType" factoryName="Python">
-    <module name="spoc" />
+    <module name="sejminfo" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>

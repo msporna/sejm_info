@@ -1,4 +1,5 @@
 # author: Michal Sporna
+import base64
 import codecs
 import datetime
 import os
@@ -83,6 +84,20 @@ class SejmParser:
                     mode = "a"
                 with codecs.open(metadata_filename, mode, "utf-8") as f:
                     f.write(f"{p['number']};{p['title']};{p['processPrint'][0]}")
+
+    def get_poslowie(self):
+        print("getting poslowie...")
+        get_all_poslowie_url = f"{self.host}/sejm/term{self.current_term}/MP"
+        poslowie_raw = requests.get(get_all_poslowie_url).json()
+        poslowie = []
+        for p in poslowie_raw:
+            if p.get('active'):
+                print(f"processing {p.get('firstLastName')}")
+                img_url = f"{self.host}/sejm/term{self.current_term}/MP/{p.get('id')}/photo"
+                p["photo"] = base64.b64encode(requests.get(img_url).content)
+                poslowie.append(p)
+        print("done getting poslowie...")
+        return poslowie
 
     def get_project_status(self):
         """

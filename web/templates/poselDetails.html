@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row content" style="padding-top:10px">
+    <div class="row">
+        <div class="col-12 ">
+            <p>
+                <span style="color:#efe2e2;background:#c452e0;border:solid;border-width:1px;border-style:dotted">Imię i nazwisko:</span>
+                <span style="color:#efe2e2;background:#6c3f77;border:solid;border-width:1px;border-style:dotted">{{posel.name}} ({{posel.club}})</span>
+            </p>
+            <p>
+                <span style="color:#efe2e2;background:#c452e0;border:solid;border-width:1px;border-style:dotted">Data urodzenia:</span>
+                <span style="color:#efe2e2;background:#6c3f77;border:solid;border-width:1px;border-style:dotted">{{posel.dob}}</span>
+            </p>
+            <p>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#about"
+                            type="button" role="tab" aria-controls="home" aria-selected="true" style="color:#c452e0">
+                        Profil
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#voting"
+                            type="button" role="tab" aria-controls="profile" aria-selected="false"
+                            style="color:#c452e0">Głosowania
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="sejm_details">
+                <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="home-tab">
+                    <iframe class="posel-details-iframe" src="{{sejm_link}}"
+                            title="about"></iframe>
+                </div>
+                <div class="tab-pane fade" id="voting" role="tabpanel" aria-labelledby="profile-tab">
+                    <iframe class="posel-details-iframe" src="{{voting_link}}"
+                            title="voting"></iframe>
+                </div>
+
+            </div>
+
+
+            </p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

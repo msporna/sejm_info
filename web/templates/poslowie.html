@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row content" style="padding-top:10px">
+    <div class="row">
+        <div class="col-12 ">
+
+            <div class="accordion" id="clubs" style="margin-top:3vh">
+                {% for club,district in clubs.items() %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_{{club}}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse_{{club}}" aria-expanded="true"
+                                aria-controls="collapse_{{club}}">
+                            {{club}}
+                        </button>
+                    </h2>
+                    <div id="collapse_{{club}}" class="accordion-collapse collapse" aria-labelledby="heading_{{club}}"
+                         data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+
+                            <div class="accordion" id="districts" style="margin-top:3vh">
+                                {% for district,posels in district.items() %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading_{{district}}">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapse_{{district}}" aria-expanded="true"
+                                                aria-controls="collapse_{{district}}">
+                                            {{district}}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse_{{district}}" class="accordion-collapse collapse"
+                                         aria-labelledby="heading_{{club}}"
+                                         data-bs-parent="#districts">
+                                        <div class="accordion-body">
+
+                                            {% for posel in posels %}
+                                            {% set image_name =posel.id %}
+                                            <div class="card card-posel" style="margin-top:4px">
+                                                <img src="{{ url_for('static', filename = 'images/poslowie/'+image_name|string+'.png') }}"
+                                                     class="card-img-top" alt="{{posel.name}}"
+                                                     style="width:135px;height:170px;margin-left:25%;margin-top:5px">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{posel.name}}</h5>
+                                                    <p class="card-text">{{posel.district_name}}</p>
+                                                    <a href="/poslowie/posel={{posel.id}}" class="btn btn-primary">Szczegóły</a>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -22,11 +22,7 @@ summary of 45 files costs about 2$ (chat gpt 3.5 tubo)
 ---
 DEPLOY
 ---
+0. clone latest
 1. root folder
-2. run: `docker-compose up -d --build`
-3. certbot will generate and download letsencrypt cert for sejm.info
-4. go to the nginx folder in the root and modify dockerfile to copy nginx_ssl.conf instead of nginx.conf
-5. docker-compose down
-6. rebuild to include nginx changes : `docker-compose up -d --build`
-a. nginx will now work with https
-7. done
+2. run: `docker-compose down`
+3. run: `docker-compose up -d --build`
