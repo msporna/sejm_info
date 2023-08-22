@@ -16,7 +16,7 @@ function onLinkClicked(readItemId) {
     }
    
 
-    Cookies.set('readItems', readItems)
+    Cookies.set('readItems', readItems, { expires: 365 })
 }
 
 function markAlreadyReadLinks() {
