@@ -73,7 +73,33 @@ def delete_backup_temp():
     delete_directories("backup_temp/metadata")
 
 
+def create_folder_structure_if_doesnt_exist():
+    if not os.path.exists("download/pending"):
+        os.makedirs("download/pending")
+    if not os.path.exists("download/processed"):
+        os.makedirs("download/processed")
+    if not os.path.exists("download/processed_txt_files_archive"):
+        os.makedirs("download/processed_txt_files_archive")
+    if not os.path.exists("download/raw_pdf"):
+        os.makedirs("download/raw_pdf")
+    if not os.path.exists("download/raw_pdf_already_done"):
+        os.makedirs("download/raw_pdf_already_done")
+    if not os.path.exists("download/twitter_lines"):
+        os.makedirs("download/twitter_lines")
+    if not os.path.exists("generated_hashtags"):
+        os.makedirs("generated_hashtags")
+    if not os.path.exists("metadata"):
+        os.makedirs("metadata")
+    if not os.path.exists("backup_temp"):
+        os.makedirs("backup_temp")
+    if not os.path.exists("backup"):
+        os.makedirs("backup")
+    if not os.path.exists("img_ocr_temp"):
+        os.makedirs("img_ocr_temp")
+
+
 def create_backup():
+    create_folder_structure_if_doesnt_exist()
     print("starting backup preparation...")
     delete_backup_temp()
 
@@ -113,3 +139,4 @@ def create_backup():
 
 def copy_sqlite_db_to_web():
     shutil.copy2("sejminfo.db", "../web/sejminfo.db")
+    print("copied to web")

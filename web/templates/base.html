@@ -4,11 +4,11 @@
     <meta name="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="description"
-          content="Podsumowanie oraz streszczenie projektów ustaw nad którymi pracują posłowie w sejmie."/>
+          content="Podsumowanie projektów ustaw nad którymi pracują posłowie w sejmie a także lista posłów RP z podziałem na kluby parlamentarne i okręgi wyborcze."/>
     <meta name="keywords"
-          content="analiza ustaw,demokracja,projekty ustaw,sejm,streszczenia projektów ustaw,proces legislacyjny"/>
+          content="lista posłów,posłowie rp,analiza ustaw,demokracja,projekty ustaw,sejm,streszczenia projektów ustaw,proces legislacyjny"/>
     <meta name="robots" content="index, archive"/>
-    <title>Sejm Info | Streszczenie projektów ustaw nad którymi pracują posłowie sejmu</title>
+    <title>Sejm Info | Streszczenie projektów ustaw oraz informacje o posłach</title>
     {% import 'macros/imports_macro.html' as import_macro %}
     {{ import_macro.do_imports() }}
 </head>
@@ -19,7 +19,8 @@
         <nav class="nav">
             <a class="nav-link active" style="color:white;font-weight: bold" aria-current="page" href="/">{{ title
                 }}</a>
-            <a class="nav-link" style="margin-left:2vw;color:white" href="/about">O co chodzi?</a>
+            <a class="nav-link" style="margin-left:1vw;color:white" href="/poslowie">Poslowie</a>
+            <a class="nav-link" style="margin-left:1vw;color:white" href="/about">O co chodzi?</a>
         </nav>
     </div>
     {% block content %} {% endblock %}
@@ -157,6 +158,12 @@ insights.trackPages();
                 }
             });
         });
+
+
+
+
+
+
 
 
 
