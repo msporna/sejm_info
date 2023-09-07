@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-last_update = "2023/08/22"  # todo  UPDATE THIS DATE AFTER EACH UPDATE
+last_update = "2023/09/07"  # todo  UPDATE THIS DATE AFTER EACH UPDATE
 
 title = "Sejm Info"
 sqlite_handler = SqliteHandler()
