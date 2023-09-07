@@ -55,7 +55,7 @@ class TxtSummarizer:
             deeper_summary = ""
             for c in chunks:
                 deeper_summary += " " + self.summarize(c,
-                                                       prompt="Napisz streszczenie tekstu które dostaniesz. Upewnij się że język użyty w streszczeniu jest zrozumiały dla przeciętnego człowieka. Streszczenie powinno zawierać najbardziej kontrowersyjne lub ważne dla obywatela fragmenty.",
+                                                       prompt="Jesteś ekspertem od spraw politycznych. Napisz streszczenie tekstu które dostaniesz. Upewnij się że język użyty w streszczeniu jest zrozumiały dla przeciętnego człowieka. Streszczenie powinno zawierać najbardziej kontrowersyjne lub ważne dla obywatela fragmenty.",
                                                        max_tokens=600)
             print(">>> WHOLE SUMMARY TEXT:")
             print(deeper_summary)
@@ -106,7 +106,7 @@ class TxtSummarizer:
         return chunks
 
     def summarize(self, input_text,
-                  prompt="Napisz krótkie streszczenie tekstu który dostaniesz tak aby zmieścił się w jednym tweecie.",
+                  prompt="Jesteś expertem politologii. Napisz krótkie streszczenie tekstu który dostaniesz tak aby zmieścił się w jednym tweecie.",
                   max_tokens=300):
         """
         https://platform.openai.com/docs/api-reference/completions/object
