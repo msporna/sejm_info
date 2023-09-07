@@ -20,7 +20,7 @@ class SejmParser:
 
     def get_all_projects(self):
         projects_response = requests.get(self.get_all_projects_url)
-        if projects_response.status_code > 200 and projects_response.status_code < 300:
+        if projects_response.status_code >= 200 and projects_response.status_code < 300:
             return projects_response.json()
         else:
             print(f"response from sejm is {projects_response.status_code}")
