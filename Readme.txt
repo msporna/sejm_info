@@ -13,6 +13,12 @@ sejm parser run
 ---
 OPENAI_API_KEY='{key_here}' python main.py
 
+IMPORTANT: install tesseract:
+
+sudo apt install tesseract-ocr
+sudo apt install libtesseract-dev
+sudo apt-get install tesseract-ocr-pol
+
 ---
 CHAT GPT COST
 ---
