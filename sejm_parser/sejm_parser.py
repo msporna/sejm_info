@@ -35,7 +35,7 @@ class SejmParser:
         with open("last_project_date.txt", "r") as f:
             latest_saved_date = f.read()
             print(f"new projects must have been added after {latest_saved_date}...")
-            latest_saved_date = datetime.datetime.strptime(latest_saved_date, "%Y-%m-%d")
+            latest_saved_date = datetime.datetime.strptime(latest_saved_date.strip(), "%Y-%m-%d")
         all_projects = self.get_all_projects()
         raw_new_project_dates = []
         new_projects = []
