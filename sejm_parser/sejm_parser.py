@@ -21,7 +21,7 @@ class SejmParser:
 
         with open("last_project_date.txt", "r") as f:
             latest_saved_date = f.read()
-            print(f"new projects must have been added after {latest_saved_date}...")
+            print(f"looking for new projects added after {latest_saved_date}...")
             latest_saved_date = datetime.strptime(latest_saved_date.strip(), "%Y-%m-%d")
 
         with sync_playwright() as p:
@@ -77,18 +77,22 @@ class SejmParser:
                 tuple_data = (nr_druku, data_pisma, tytul, link)
                 table_data.append(tuple_data)
 
+            print(f"detected the following projects {len(table_data)}:")
             print(table_data)  # Output the extracted data
 
             browser.close()
+        print(f'setting last project date to {datetime.now().strftime("%Y-%m-%d")}')
         with open("last_project_date.txt", "w") as f:
             f.write(datetime.now().strftime("%Y-%m-%d"))
         self.download_pdfs_via_chrome(table_data)
 
     def download_pdfs_via_chrome(self, data):
+        print("starting to download the projects...")
         delete_files_in_directory("download/raw_pdf")
         delete_files_in_directory("download/raw_pdf_already_done")
         for d in data:
             pdf_filename = f'{d[0]}.pdf'
+            print(f"downloading {pdf_filename}")
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=True)
                 context = browser.new_context()
