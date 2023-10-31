@@ -88,7 +88,7 @@ class SejmParser:
         for d in data:
             pdf_filename = f'{d[0]}.pdf'
             with sync_playwright() as p:
-                browser = p.chromium.launch(headless=False)
+                browser = p.chromium.launch(headless=True)
                 context = browser.new_context()
                 page = context.new_page()
                 page.goto(d[3])
