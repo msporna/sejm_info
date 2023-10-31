@@ -1,11 +1,10 @@
 # author: Michal Sporna
 import base64
 import codecs
-import datetime
-import os
+from playwright.sync_api import sync_playwright
 import pathlib
 import shutil
-
+from datetime import datetime
 import requests
 
 from generic import delete_files_in_directory
@@ -17,6 +16,107 @@ class SejmParser:
         self.current_term = 9
         self.host = "https://api.sejm.gov.pl"
         self.get_all_projects_url = f"{self.host}/sejm/term{self.current_term}/prints/"
+
+    def get_all_projects_via_web(self):
+
+        with open("last_project_date.txt", "r") as f:
+            latest_saved_date = f.read()
+            print(f"new projects must have been added after {latest_saved_date}...")
+            latest_saved_date = datetime.strptime(latest_saved_date.strip(), "%Y-%m-%d")
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context()
+            page = context.new_page()
+
+            page.goto(
+                f'https://www.sejm.gov.pl/Sejm{self.current_term}.nsf/druki.xsp?view=S')  # Replace YOUR_WEBSITE_URL with the actual URL
+
+            # Step 1: Select value 'jest po' in the dropdown
+            page.select_option('#view\\:_id1\\:_id2\\:facetMain\\:_id123\\:_id124\\:_id127\\:cdrData\\:cbData',
+                               'jest po')
+
+            # Step 2: Fill the date input
+            page.fill('#view\\:_id1\\:_id2\\:facetMain\\:_id123\\:_id124\\:_id127\\:cdrData\\:dtpData1',
+                      latest_saved_date.strftime('%Y-%m-%d'))
+
+            # Step 3: Select 'projekt ustawy' and 'projekt uchwały' while holding Ctrl
+            # JavaScript code to select multiple options in a multi-select dropdown
+            select_script = """
+                 (selectId) => {
+                     const select = document.getElementById(selectId);
+                     const options = select.options;
+                     for (let i = 0; i < options.length; i++) {
+                         if (options[i].value === 'projekt ustawy' || options[i].value === 'projekt uchwały') {
+                             options[i].selected = true;
+                         }
+                     }
+                     const event = new Event('change', { bubbles: true });
+                     select.dispatchEvent(event);
+                 }
+                 """
+
+            # Execute the JavaScript code to select 'projekt ustawy' and 'projekt uchwały'
+            page.evaluate(select_script, 'view:_id1:_id2:facetMain:_id123:_id124:_id127:lbxrodzaj')
+
+            # Step 4: Click the 'Szukaj' button
+            page.click('text=Szukaj')
+
+            # Wait for the results or perform further actions as needed
+            page.wait_for_selector('.table.border-bottom')
+
+            table_rows = page.query_selector_all('table.table.border-bottom tbody tr')
+            table_data = []
+
+            for row in table_rows:
+                columns = row.query_selector_all('td')
+                nr_druku = columns[0].text_content().strip()
+                data_pisma = columns[1].text_content().strip()
+                tytul = columns[2].text_content().strip()
+                link = f"https://www.sejm.gov.pl/Sejm{self.current_term}.nsf/{columns[2].query_selector('a').get_attribute('href')}"
+                tuple_data = (nr_druku, data_pisma, tytul, link)
+                table_data.append(tuple_data)
+
+            print(table_data)  # Output the extracted data
+
+            browser.close()
+        self.download_pdfs_via_chrome(table_data)
+
+    def download_pdfs_via_chrome(self, data):
+        delete_files_in_directory("download/raw_pdf")
+        delete_files_in_directory("download/raw_pdf_already_done")
+        for d in data:
+            pdf_filename = f'{d[0]}.pdf'
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                context = browser.new_context()
+                page = context.new_page()
+                page.goto(d[3])
+                page.wait_for_load_state("load")
+                # Extract the URL of the PDF file
+                # link = page.locator(f'//a[normalize-space(text()) = "{pdf_filename}"]')
+                link = page.locator("a[href$='.pdf']").first
+                if link:
+                    href = link.get_attribute("href")
+                    self.download_pdf(href, f"download/raw_pdf/{pdf_filename}")
+
+                browser.close()
+
+    def download_pdf(self, url, filename):
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            with open(filename, 'wb') as pdf_file:
+                for chunk in response.iter_content(1024):
+                    pdf_file.write(chunk)
+            print(f"PDF downloaded successfully as '{filename}'.")
+        else:
+            print("Failed to download PDF.")
+
+    ########################################################################
+    #
+    # OLD APPROACH VIA API
+    #
+    ########################################################################
 
     def get_all_projects(self):
         projects_response = requests.get(self.get_all_projects_url)

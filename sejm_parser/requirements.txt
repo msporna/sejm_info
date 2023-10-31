@@ -3,3 +3,4 @@ pdfplumber
 openai
 tiktoken
 requests
+playwright

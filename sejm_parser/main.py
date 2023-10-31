@@ -12,7 +12,7 @@ if __name__ == '__main__':
     create_backup()
     sql_handler = SqliteHandler()
     sejm_parser = SejmParser()
-    sejm_parser.get_new_projects()
+    sejm_parser.get_all_projects_via_web()
     pdf_extractor = PdfExtractor()
     pdf_extractor.extract_text_from_raw_pdfs()
     ai_summarizer = TxtSummarizer()
