@@ -80,6 +80,8 @@ class SejmParser:
             print(table_data)  # Output the extracted data
 
             browser.close()
+        with open("last_project_date.txt", "w") as f:
+            f.write(datetime.now().strftime("%Y-%m-%d"))
         self.download_pdfs_via_chrome(table_data)
 
     def download_pdfs_via_chrome(self, data):
