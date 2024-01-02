@@ -16,6 +16,14 @@ def delete_files_in_directory(dir_path):
         print(f"Couldn't delete from {dir_path}. Probably already clean...")
 
 
+def get_project_submitting_party(project_id):
+    path = f"submiting_party/{project_id}.txt"
+    if os.path.isfile(path):
+        with codecs.open(path, 'r', "utf-8") as f:
+            submitting_party = f.readlines()[0].strip()
+            return submitting_party
+
+
 def get_project_hashtags(project_id):
     path = f"generated_hashtags/{project_id}.txt"
     if os.path.isfile(path):
@@ -41,6 +49,7 @@ def get_project_metadata(project_id):
                     print(f"checking {pid} from metadata if matches [{project_id}]")
                     if pid == project_id:
                         return title, process_id
+    return None, None
 
 
 def copy(src, dst):
@@ -96,6 +105,8 @@ def create_folder_structure_if_doesnt_exist():
         os.makedirs("backup")
     if not os.path.exists("img_ocr_temp"):
         os.makedirs("img_ocr_temp")
+    if not os.path.exists("submiting_party"):
+        os.makedirs("submiting_party")
 
 
 def create_backup():
@@ -104,7 +115,10 @@ def create_backup():
     delete_backup_temp()
 
     # copy files to backup
-    copy("sejminfo.db", "backup_temp/sejminfo.db")
+    try:
+        copy("sejminfo.db", "backup_temp/sejminfo.db")
+    except:
+        print("db not found. skipping backup")
     copytree("download/pending", "backup_temp/download/pending")
     copytree("download/processed", "backup_temp/download/processed")
     copytree("download/processed_txt_files_archive", "backup_temp/download/processed_txt_files_archive")
@@ -112,6 +126,7 @@ def create_backup():
     copytree("download/raw_pdf_already_done", "backup_temp/download/raw_pdf_already_done")
     copytree("download/twitter_lines", "backup_temp/download/twitter_lines")
     copytree("generated_hashtags", "backup_temp/generated_hashtags")
+    copytree("submiting_party", "backup_temp/submiting_party")
     copytree("metadata", "backup_temp/metadata")
 
     # zip
@@ -129,6 +144,7 @@ def create_backup():
     delete_files_in_directory("download/raw_pdf_already_done")
     delete_files_in_directory("download/twitter_lines")
     delete_files_in_directory("generated_hashtags")
+    delete_files_in_directory("submiting_party")
     delete_files_in_directory("metadata")
     delete_files_in_directory("img_ocr_temp")
 

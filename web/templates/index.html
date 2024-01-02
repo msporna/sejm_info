@@ -7,7 +7,7 @@
     <div class="row " style="padding-top:2vh">
         <div class="col-12">
 
-            <p property="projekt ustawy"><span style="color:#efe2e2;font-weight: bold">{{loop.index}}.</span> <a
+            <p property="projekt ustawy/uchwały"><span style="color:#efe2e2;font-weight: bold">{{loop.index}}.</span> <a
                     id="{{dict_item['id']}}"
                     onclick="javascript:onLinkClicked('{{dict_item['id']}}')"
                     class="link-black"
@@ -16,7 +16,9 @@
             <p style="font-size:14px;margin-top:-8px;margin-left:1vw;color:#ffe51f">{{dict_item["hashtags"]}}
             </p>
             <p style="font-size:14px;margin-top:1px;margin-left:1vw"><span class="badge bg-primary"
-                                                                           style="color:#292929">Data dodania: [{{dict_item["added_date"]}}]</span>
+                                                                           style="color:#292929">Data dodania: [{{dict_item["added_date"]}}]</span><span
+                    class="badge bg-primary" style="margin-left:5px"
+                    style="color:#292929">{{dict_item["submitting_party"]}}</span>
 
             </p>
 
@@ -27,6 +29,10 @@
 
     <script>
         markAlreadyReadLinks();
+
+
+
+
 
 
 

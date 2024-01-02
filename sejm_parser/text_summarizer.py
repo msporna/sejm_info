@@ -33,29 +33,29 @@ class TxtSummarizer:
             self.raw_summarized = []
             project_id = content_raw.get("pid")
             content = content_raw.get("content")
-            chunks = self.separate_into_chunks(content, 3000, 50)
-
-            print(f">>Summarizing {project_id}....")
-            ct = 1
-            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-                future_to_summary = {executor.submit(self.summarize, c): c for c in chunks}
-                for future in concurrent.futures.as_completed(future_to_summary):
-                    print(f"completed summary {ct}")
-                    ct += 1
-
-            print("summaries done, saving to file...")
-            file = codecs.open(f"download/twitter_lines/{project_id}.txt", "w", "utf-8")
-            for s in self.raw_summarized:
-                file.write(s + "\n")
-            file.close()
+            # chunks = self.separate_into_chunks(content, 3000, 50)
+            #
+            # print(f">>Summarizing {project_id}....")
+            # ct = 1
+            # with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            #     future_to_summary = {executor.submit(self.summarize, c): c for c in chunks}
+            #     for future in concurrent.futures.as_completed(future_to_summary):
+            #         print(f"completed summary {ct}")
+            #         ct += 1
+            #
+            # print("summaries done, saving to file...")
+            # file = codecs.open(f"download/twitter_lines/{project_id}.txt", "w", "utf-8")
+            # for s in self.raw_summarized:
+            #     file.write(s + "\n")
+            # file.close()
 
             # final summary
             print("preparing the main summary")
-            chunks = self.separate_into_chunks(self.summarized, 3000, 50)
+            chunks = self.separate_into_chunks(content, 3000, 50)
             deeper_summary = ""
             for c in chunks:
                 deeper_summary += " " + self.summarize(c,
-                                                       prompt="Jesteś ekspertem od spraw politycznych. Napisz streszczenie tekstu które dostaniesz. Upewnij się że język użyty w streszczeniu jest zrozumiały dla przeciętnego człowieka. Streszczenie powinno zawierać najbardziej kontrowersyjne lub ważne dla obywatela fragmenty.",
+                                                       prompt="Jesteś ekspertem od polityki w Polsce. Za chwilę wkleję ci tekst projektu ustawy lub uchwały nad którą pracuje sejm RP. Przeanalizuj i streść ogólny charakter dokumentu.",
                                                        max_tokens=600)
             print(">>> WHOLE SUMMARY TEXT:")
             print(deeper_summary)
@@ -106,8 +106,8 @@ class TxtSummarizer:
         return chunks
 
     def summarize(self, input_text,
-                  prompt="Jesteś expertem politologii. Napisz krótkie streszczenie tekstu który dostaniesz tak aby zmieścił się w jednym tweecie.",
-                  max_tokens=300):
+                  prompt="Jesteś ekspertem od polityki w Polsce. Za chwilę wkleję ci tekst projektu ustawy lub uchwały nad którą pracuje sejm RP. Przeanalizuj i streść ogólny charakter dokumentu. Napisz o czym jest ten projekt i zrób to zwięźle bym mógł opublikować to w 1 tweecie (max 150 znaków).",
+                  max_tokens=150):
         """
         https://platform.openai.com/docs/api-reference/completions/object
         :param input_text:

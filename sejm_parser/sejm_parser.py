@@ -13,9 +13,71 @@ from generic import delete_files_in_directory
 class SejmParser:
 
     def __init__(self):
-        self.current_term = 9
+        self.current_term = 10
         self.host = "https://api.sejm.gov.pl"
         self.get_all_projects_url = f"{self.host}/sejm/term{self.current_term}/prints/"
+
+    def get_all_projects_via_web_v2(self):
+        uchwaly = 'https://www.sejm.gov.pl/sejm10.nsf/druki.xsp?view=3&typ=projekt%20uchwa%C5%82y'
+        ustawy = 'https://www.sejm.gov.pl/sejm10.nsf/druki.xsp?view=3&typ=projekt%20ustawy&page=1'
+
+        with open("last_project_date.txt", "r") as f:
+            latest_saved_date = f.read()
+            print(f"looking for new projects added after {latest_saved_date}...")
+            latest_saved_date = datetime.strptime(latest_saved_date.strip(), "%Y-%m-%d")
+
+        delete_files_in_directory("download/raw_pdf")
+        delete_files_in_directory("download/raw_pdf_already_done")
+        delete_files_in_directory("metadata")
+
+        table_data = self.parse_and_download_pdf_via_web(uchwaly, latest_saved_date, 'uchwala')
+        self.download_pdfs_via_chrome(table_data, "uchwala")
+
+        table_data = self.parse_and_download_pdf_via_web(ustawy, latest_saved_date, 'ustawa')
+        self.download_pdfs_via_chrome(table_data, "ustawa")
+
+        print(f'setting last project date to {datetime.now().strftime("%Y-%m-%d")}')
+        with open("last_project_date.txt", "w") as f:
+            f.write(datetime.now().strftime("%Y-%m-%d"))
+
+    def parse_and_download_pdf_via_web(self, url, latest_saved_date, type):
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context()
+            page = context.new_page()
+
+            page.goto(url, timeout=120000)
+
+            # Wait for the results or perform further actions as needed
+            page.wait_for_selector('.table.border-bottom')
+
+            table_rows = page.query_selector_all('table.table.border-bottom tbody tr')
+            table_data = []
+
+            for row in table_rows:
+                columns = row.query_selector_all('td')
+                nr_druku = columns[0].text_content().strip()
+                data_pisma = datetime.strptime(columns[1].text_content().strip(), "%Y-%m-%d")
+                doc_date = datetime.strptime(columns[1].text_content().strip(), "%Y-%m-%d")
+                if doc_date > latest_saved_date:
+                    tytul = columns[2].text_content().strip()
+                    link = f"https://www.sejm.gov.pl/Sejm{self.current_term}.nsf/{columns[2].query_selector('a').get_attribute('href')}"
+                    tuple_data = (nr_druku, data_pisma, tytul, link)
+                    table_data.append(tuple_data)
+
+                    mode = "w"
+                    metadata_filename = f"metadata/project_metadata-{nr_druku}_{type}.txt"
+                    if pathlib.Path(metadata_filename).is_file():
+                        mode = "a"
+
+                    with codecs.open(metadata_filename, mode, "utf-8") as f:
+                        f.write(f"{nr_druku}_{type};{tytul};{link}")
+
+            print(f"detected the following projects {len(table_data)}:")
+            print(table_data)  # Output the extracted data
+
+            browser.close()
+        return table_data
 
     def get_all_projects_via_web(self):
 
@@ -30,7 +92,7 @@ class SejmParser:
             page = context.new_page()
 
             page.goto(
-                f'https://www.sejm.gov.pl/Sejm{self.current_term}.nsf/druki.xsp?view=S')  # Replace YOUR_WEBSITE_URL with the actual URL
+                f'https://www.sejm.gov.pl/Sejm{self.current_term}.nsf/druki.xsp?view=S')
 
             # Step 1: Select value 'jest po' in the dropdown
             page.select_option('#view\\:_id1\\:_id2\\:facetMain\\:_id123\\:_id124\\:_id127\\:cdrData\\:cbData',
@@ -86,18 +148,16 @@ class SejmParser:
             f.write(datetime.now().strftime("%Y-%m-%d"))
         self.download_pdfs_via_chrome(table_data)
 
-    def download_pdfs_via_chrome(self, data):
+    def download_pdfs_via_chrome(self, data, type):
         print("starting to download the projects...")
-        delete_files_in_directory("download/raw_pdf")
-        delete_files_in_directory("download/raw_pdf_already_done")
         for d in data:
-            pdf_filename = f'{d[0]}.pdf'
+            pdf_filename = f'{d[0]}_{type}.pdf'
             print(f"downloading {pdf_filename}")
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=True)
                 context = browser.new_context()
                 page = context.new_page()
-                page.goto(d[3])
+                page.goto(d[3], timeout=120000)
                 page.wait_for_load_state("load")
                 # Extract the URL of the PDF file
                 # link = page.locator(f'//a[normalize-space(text()) = "{pdf_filename}"]')

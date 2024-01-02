@@ -93,6 +93,6 @@ class SqliteHandler:
                  "added_date": datetime.datetime.strptime(r[3], "%Y-%m-%d %H:%M:%S"),
                  "url": r[4],
                  "title": r[5], "hashtags": r[6], "long_summary": base64.b64decode(r[7]).decode("utf-8", "ignore"),
-                 "process_id": r[8], "document_date": r[9], "process_url": r[10]})
-        summaries = sorted(summaries, key=lambda d: d["added_date"], reverse=True)
+                 "process_id": r[8], "document_date": r[9], "process_url": r[10], "submitting_party": r[11]})
+            summaries = sorted(summaries, key=lambda d: d["added_date"], reverse=True)
         return summaries

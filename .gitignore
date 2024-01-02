@@ -5,3 +5,4 @@ sejm_parser/generated_hashtags/**
 sejm_parser/img_ocr_temp/**
 sejm_parser/metadata/**
 sejm_parser/__pycache__/**
+/sejm_parser/submiting_party/

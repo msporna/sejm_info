@@ -4,7 +4,7 @@ import datetime
 import os
 import sqlite3
 
-from generic import get_project_metadata, get_project_hashtags
+from generic import get_project_metadata, get_project_hashtags, get_project_submitting_party
 from sqlite_schema import create_tables
 
 
@@ -12,7 +12,7 @@ class SqliteHandler:
 
     def __init__(self):
         create_tables(self.open_connection())
-        self.term = 9
+        self.term = 10
 
     def open_connection(self):
         connection = sqlite3.connect("sejminfo.db")
@@ -44,30 +44,39 @@ class SqliteHandler:
             print(f"will insert {f}")
             if os.path.isfile(f):
                 title, process_id = get_project_metadata(project_number)
+                if title is None or process_id is None:
+                    continue
                 hashtags = get_project_hashtags(project_number)
+                submitting_party = get_project_submitting_party(project_number)
                 print(f"inserting file: {f}")
-                # long summary
+                # long summary (not supported anymore, there is only one summary since 2/1/2024)
                 long_summary = ""
                 summary = ""
-                with codecs.open(f"download/twitter_lines/{project_number}.txt", "r", "utf-8") as file:
-                    long_summary = file.read()
-                long_summary = base64.b64encode(bytes(long_summary, 'utf-8'))
+                # with codecs.open(f"download/twitter_lines/{project_number}.txt", "r", "utf-8") as file:
+                #     long_summary = file.read()
+                # long_summary = base64.b64encode(bytes(long_summary, 'utf-8'))
                 # short summary
                 with codecs.open(f, "r", "utf-8") as file:
                     summary = file.read()
                 summary = base64.b64encode(bytes(summary, 'utf-8'))
 
-                url = f'https://www.sejm.gov.pl/Sejm{self.term}.nsf/druk.xsp?nr={project_number}'
-                url_process = f'https://www.sejm.gov.pl/Sejm{self.term}.nsf/PrzebiegProc.xsp?nr={process_id}'
+                raw_project_number = ''
+                if "_ustawa" in project_number:
+                    raw_project_number = project_number.replace("_ustawa", "").strip()
+                elif "_uchwala" in project_number:
+                    raw_project_number = project_number.replace("_uchwala", "").strip()
 
-                sql = "INSERT INTO summary(summary,project_id,date,project_url,title,hashtags,long_summary,process_id,document_date,process_url) VALUES(?,?,?,?,?,?,?,?,?,?)"
+                url = f'https://www.sejm.gov.pl/Sejm{self.term}.nsf/druk.xsp?nr={raw_project_number}'
+                url_process = f'https://www.sejm.gov.pl/Sejm{self.term}.nsf/PrzebiegProc.xsp?nr={raw_project_number}'
+
+                sql = "INSERT INTO summary(summary,project_id,date,project_url,title,hashtags,long_summary,process_id,document_date,process_url,submitting_party) VALUES(?,?,?,?,?,?,?,?,?,?,?)"
                 connection = self.open_connection()
                 connection.cursor().execute(sql, (
-                    summary, project_number, datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"), url, title,
-                    hashtags, long_summary, process_id, None, url_process))
+                    summary, raw_project_number, datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"), url, title,
+                    hashtags, long_summary, process_id, None, url_process, submitting_party))
                 connection.commit()
                 connection.close()
-                print(f"insert of {project_number} done")
+                print(f"insert of {raw_project_number} done")
         print("done inserting")
 
     def insert_poslowie(self, poslowie):
