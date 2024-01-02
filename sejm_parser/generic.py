@@ -45,10 +45,10 @@ def get_project_metadata(project_id):
             with codecs.open(f, 'r', "utf-8") as f:
                 metadata_lines = f.readlines()
                 for metadata in metadata_lines:
-                    pid, title, process_id = metadata.split(";")
+                    pid, title, date = metadata.split(";")
                     print(f"checking {pid} from metadata if matches [{project_id}]")
                     if pid == project_id:
-                        return title, process_id
+                        return title, date
     return None, None
 
 
@@ -80,6 +80,7 @@ def delete_backup_temp():
     delete_directories("backup_temp/download")
     delete_directories("backup_temp/generated_hashtags")
     delete_directories("backup_temp/metadata")
+    delete_directories("backup_temp/submiting_party")
 
 
 def create_folder_structure_if_doesnt_exist():

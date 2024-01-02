@@ -71,7 +71,7 @@ class SejmParser:
                         mode = "a"
 
                     with codecs.open(metadata_filename, mode, "utf-8") as f:
-                        f.write(f"{nr_druku}_{type};{tytul};{link}")
+                        f.write(f"{nr_druku}_{type};{tytul};{data_pisma}")
 
             print(f"detected the following projects {len(table_data)}:")
             print(table_data)  # Output the extracted data

@@ -43,8 +43,8 @@ class SqliteHandler:
             f = os.path.join(dir, filename)
             print(f"will insert {f}")
             if os.path.isfile(f):
-                title, process_id = get_project_metadata(project_number)
-                if title is None or process_id is None:
+                title, date = get_project_metadata(project_number)
+                if title is None or date is None:
                     continue
                 hashtags = get_project_hashtags(project_number)
                 submitting_party = get_project_submitting_party(project_number)
@@ -73,7 +73,7 @@ class SqliteHandler:
                 connection = self.open_connection()
                 connection.cursor().execute(sql, (
                     summary, raw_project_number, datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"), url, title,
-                    hashtags, long_summary, process_id, None, url_process, submitting_party))
+                    hashtags, long_summary, raw_project_number, date, url_process, submitting_party))
                 connection.commit()
                 connection.close()
                 print(f"insert of {raw_project_number} done")
