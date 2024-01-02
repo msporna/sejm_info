@@ -56,7 +56,8 @@ def details(item_id):
     item_id = int(item_id)
     for s in current_app.summaries:
         if s["id"] == item_id:
-            return render_template("details.html", item_id=item_id, title=title, summary=s["summary"],
+            return render_template("details.html", item_id=item_id, title=title, item_title=s["title"],
+                                   summary=s["summary"],
                                    long_summary=s["long_summary"],
                                    project_id=s["project_id"], url=s["url"], process_url=s["process_url"],
                                    document_date=s["document_date"])
