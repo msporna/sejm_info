@@ -88,6 +88,10 @@ class TxtSummarizer:
                 with open(f, 'r', encoding="utf-8") as file:
                     content = file.read()
                 content = content.replace("\n", " ")
+                if "_ustawa" in filename:
+                    filename = filename.replace("_ustawa", "")
+                elif "_uchwala" in filename:
+                    filename = filename.replace("_uchwala", "")
                 contents.append({"pid": filename.replace(".txt", ""), "content": content})
         return contents
 
