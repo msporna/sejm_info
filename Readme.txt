@@ -3,7 +3,9 @@ how to use
 -----------------
 A quick POC I did to test how openAI's api works. The scripts download legal projects from the official Polish parlament's site (https://sejm.gov.pl) and then ask chatGpt via api to summarize them. Finally, the results are put into sqlite db and displayed on a simple web page that looks like this:
 
-todo
+![main page](https://github.com/msporna/sejminfo/blob/main/images/img1.png?raw=true)
+
+![summary page](https://github.com/msporna/sejminfo/blob/main/images/img2.png?raw=true)
 
 -----------------
 how to use
