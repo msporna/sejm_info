@@ -12,14 +12,14 @@ if __name__ == '__main__':
     create_backup()
     sql_handler = SqliteHandler()
     sejm_parser = SejmParser()
-    # sejm_parser.get_all_projects_via_web_v2()
+    sejm_parser.get_all_projects_via_web_v2()
 
-    # pdf_extractor = PdfExtractor()
-    # pdf_extractor.extract_text_from_raw_pdfs()
+    pdf_extractor = PdfExtractor()
+    pdf_extractor.extract_text_from_raw_pdfs()
 
-    # ai_summarizer = TxtSummarizer()
-    # ai_summarizer.process_pending_files()
+    ai_summarizer = TxtSummarizer()
+    ai_summarizer.process_pending_files()
 
-    # sql_handler.insert_processed()
-    # copy_sqlite_db_to_web()
+    sql_handler.insert_processed()
+    copy_sqlite_db_to_web()
     print("Done")
