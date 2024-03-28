@@ -1,3 +1,13 @@
+-----------------
+how to use
+-----------------
+A quick POC I did to test how openAI's api works. The scripts download legal projects from the official Polish parlament's site (https://sejm.gov.pl) and then ask chatGpt via api to summarize them. Finally, the results are put into sqlite db and displayed on a simple web page that looks like this:
+
+todo
+
+-----------------
+how to use
+-----------------
 0. set openAI api key in env variable
 1. run sejm_parser (main.py) manually, it will update sqlite db with new records
 a) it will backup previously downloaded files into zip
